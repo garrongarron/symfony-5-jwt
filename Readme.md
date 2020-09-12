@@ -6,15 +6,24 @@ Desde la carpeta raíz del projecto ejecuta en una terminal lo siguiente, tenien
 sudo docker-compose up --build
 ```
 
-## Si descargaste algún proyecto desde git
-Teniendo en cuenta que los archivos de la aplicacion están la carpeta ***./symfony*** y el accespoint en ***./symfony/public***
-```
-sudo docker exec -it php bash
-```
 ## Probar el código localmente
 ```
 http://localhost/
 ```
+## Rutas Disponibles desde el browser
+```
+GET http://localhost/login
+```
+```
+http://localhost/register
+```
+
+## Rutas Disponibles desde la API REST
+
+```
+http://localhost/api/fb9870/documentation
+```
+
 ## Usar la consola de symfony
 ```
 sudo docker exec -it php bash
