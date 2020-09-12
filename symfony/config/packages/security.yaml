@@ -1,0 +1,39 @@
+security:
+    providers:
+        user:
+            entity: { class: App\Entity\User, property: email }
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+            cost: 15
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        api:
+            pattern: ^/api/v1/
+            stateless: true
+            anonymous: true
+            provider: user
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+        main:
+            anonymous: true
+            json_login:
+                check_path: /login
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/fb9870/documentation, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/users/create, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/api/v1/users/[0-9]+/enabled, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/v1/, roles: IS_AUTHENTICATED_FULLY }
+
+#curl -X POST -H "Content-Type: application/json" http://localhost/login -d '{"email":"fede@gmail.com","password":"123456"}'
+#curl -X GET "http://localhost/api/v1/users?page=1" -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1OTk4NTUwMTcsImV4cCI6MTU5OTg1ODYxNywicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoiZmVkZUBnbWFpbC5jb20ifQ.fESlAmDxL1Ks0UrkgHj70w2e8z1kiRsjZtHmf9a18Ku7sWtPozpgXVcMLWF3tBXmn4Ln67XNWYZfSQrwmLBLe5CuKMjldMY03zLtyYF9juzFmZqlQwII-2-8mKaXMzdMandaWUb9L0IlkJolM_3QJ-5TsDgipyWg5WXtv5SE60SZkQmtjkyi8y6QLwLrrPqVW4Jt_gUl2PIchgs2DZmvdx7VBr4oaFgvgwxghTqarwXaxxnIpXrqHi5_4Ojt2EJCCf6nQp4iltvebW8nbJdOGjCjxv2OEAJTj9qx_AeTYghMF6DaWbxuNc4Rh4i4I8Wt8ayhdvne5F9SvqRRxEG_BbAYKD3ujOIyegfjujenL2JvbhZmoHqVwvXUsy3n7BrqobwMnmRLz5R2n4H9Qri4sfN3hyzFTaSXkr9oqZcy57EWktBpS6kQFI_a2ZG3mimF4c7lvZyEbCE9mdIzF_zNvPfX5gy6_XnrCpIAB6SqW_AKT17RaKdrxAbOKWtSPdr6zrodHmfsUUb3GqlcgAgifn19819Z9FQDZrHKf_Ks98SrzToFFuuNm8ySKVIw4b2m5q2dv9Mr-MvAltn5v2YBr48YVdzmSQZ0hVc0poP3ZojAl5ghqI7ZwnJfvuxHqR1gCSTT1J0wGQQKqz9T5eSCS-712tL0xAtje-5e6s79ydk"  
